@@ -2,6 +2,7 @@ package ar.com.kfgodel.dependencies;
 
 import ar.com.dgarcia.javaspec.api.JavaSpec;
 import ar.com.dgarcia.javaspec.api.JavaSpecRunner;
+import ar.com.kfgodel.dependencies.api.DependencyInjector;
 import ar.com.kfgodel.dependencies.api.exceptions.DependencyException;
 import ar.com.kfgodel.dependencies.impl.DependencyInjectorImpl;
 import ar.com.kfgodel.dependencies.testobjects.DependenObject;
@@ -114,6 +115,11 @@ public class DependencyInjectorTest extends JavaSpec<DependencyTestContext> {
 
           assertThat(created.getDependency()).isSameAs(bindedImplementation);
         });
+      });
+
+      it("comes with itself as an injector dependency",()->{
+        DependencyInjector injectorImplementation = context().injector().getImplementationFor(DependencyInjector.class);
+        assertThat(injectorImplementation).isSameAs(context().injector());
       });
 
 

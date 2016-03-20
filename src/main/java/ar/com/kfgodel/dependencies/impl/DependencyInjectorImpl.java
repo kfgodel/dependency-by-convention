@@ -24,7 +24,7 @@ public class DependencyInjectorImpl implements DependencyInjector {
   public static DependencyInjectorImpl create() {
     DependencyInjectorImpl injector = new DependencyInjectorImpl();
     injector.instanceMappings = new HashMap<>();
-    injector.removeExistingInjector();
+    injector.initialize();
     return injector;
   }
 
@@ -90,6 +90,14 @@ public class DependencyInjectorImpl implements DependencyInjector {
    */
   private void removeExistingInjector() {
     this.guiceInjector = Optional.empty();
+  }
+
+  /**
+   * Initializes the state of this instance to be used
+   */
+  private void initialize() {
+    this.removeExistingInjector();
+    this.bindTo(DependencyInjector.class, this);
   }
 
 }
