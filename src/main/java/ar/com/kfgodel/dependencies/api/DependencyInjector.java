@@ -1,5 +1,7 @@
 package ar.com.kfgodel.dependencies.api;
 
+import ar.com.kfgodel.nary.api.Nary;
+
 /**
  * This type represents the main interface to register bindings and get injected instances, or inject an exisiting instance
  *
@@ -13,7 +15,7 @@ public interface DependencyInjector {
    * @param <T> The expected instance type
    * @return The instance that meets the expected type defined previously
    */
-  <T> T getImplementationFor(Class<T> expectedType);
+  <T> Nary<T> getImplementationFor(Class<T> expectedType);
 
   /**
    * Defines a binding to a specific instance to be used for type resolution.<br>

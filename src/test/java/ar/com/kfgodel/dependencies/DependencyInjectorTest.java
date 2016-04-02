@@ -8,6 +8,7 @@ import ar.com.kfgodel.dependencies.impl.DependencyInjectorImpl;
 import ar.com.kfgodel.dependencies.testobjects.DependenObject;
 import ar.com.kfgodel.dependencies.testobjects.StringTestImplementation;
 import ar.com.kfgodel.dependencies.testobjects.TestInterface;
+import ar.com.kfgodel.nary.api.Nary;
 import org.junit.runner.RunWith;
 
 import java.io.Serializable;
@@ -27,17 +28,19 @@ public class DependencyInjectorTest extends JavaSpec<DependencyTestContext> {
       context().injector(DependencyInjectorImpl::create);
 
       describe("when asked for a dependency", () -> {
-        it("throws an error if the dependency cannot be met",()->{
+
+        it("returns an empty nary if the dependency cannot be met", () -> {
+          Nary<TestInterface> result = context().injector().getImplementationFor(TestInterface.class);
+          assertThat(result.isAbsent()).isTrue();
+        });
+
+        it("throws an explaining error if the empty nary is forcefully accessed", () -> {
+          Nary<TestInterface> emptyNary = context().injector().getImplementationFor(TestInterface.class);
           try{
-            context().injector().getImplementationFor(TestInterface.class);
+            emptyNary.get();
             failBecauseExceptionWasNotThrown(DependencyException.class);
           }catch (DependencyException e){
-            assertThat(e).hasMessage("Can't get implementation for [interface ar.com.kfgodel.dependencies.testobjects.TestInterface]: Guice configuration errors:\n" +
-              "\n" +
-              "1) No implementation for ar.com.kfgodel.dependencies.testobjects.TestInterface was bound.\n" +
-              "  while locating ar.com.kfgodel.dependencies.testobjects.TestInterface\n" +
-              "\n" +
-              "1 error");
+            assertThat(e).hasMessage("Can't get implementation for [interface ar.com.kfgodel.dependencies.testobjects.TestInterface]: No binding defined for this type");
           }
         });
 
@@ -45,7 +48,7 @@ public class DependencyInjectorTest extends JavaSpec<DependencyTestContext> {
           StringTestImplementation bindedImplementation = StringTestImplementation.create();
           context().injector().bindTo(TestInterface.class, bindedImplementation);
 
-          TestInterface resolvedImplementation = context().injector().getImplementationFor(TestInterface.class);
+          TestInterface resolvedImplementation = context().injector().getImplementationFor(TestInterface.class).get();
 
           assertThat(resolvedImplementation).isSameAs(bindedImplementation);
         });
@@ -118,7 +121,7 @@ public class DependencyInjectorTest extends JavaSpec<DependencyTestContext> {
       });
 
       it("comes with itself as an injector dependency",()->{
-        DependencyInjector injectorImplementation = context().injector().getImplementationFor(DependencyInjector.class);
+        DependencyInjector injectorImplementation = context().injector().getImplementationFor(DependencyInjector.class).get();
         assertThat(injectorImplementation).isSameAs(context().injector());
       });
 

@@ -4,9 +4,8 @@ import ar.com.kfgodel.dependencies.api.DependencyInjector;
 import ar.com.kfgodel.dependencies.api.exceptions.DependencyException;
 import ar.com.kfgodel.diamond.api.Diamond;
 import ar.com.kfgodel.diamond.api.exceptions.DiamondException;
-import com.google.inject.ConfigurationException;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import ar.com.kfgodel.nary.api.Nary;
+import com.google.inject.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,14 +28,15 @@ public class DependencyInjectorImpl implements DependencyInjector {
   }
 
   @Override
-  public <T> T getImplementationFor(Class<T> expectedType) {
+  public <T> Nary<T> getImplementationFor(Class<T> expectedType) {
     Injector injector = getOrCreateInjector();
-    try{
-      T implementation = injector.getInstance(expectedType);
-      return implementation;
-    }catch (ConfigurationException e){
-      throw new DependencyException("Can't get implementation for ["+expectedType+"]: " + e.getMessage(),e);
-    }
+    Binding<T> binding = injector.getExistingBinding(Key.get(expectedType));
+    return Nary.ofNullable(binding)
+      .mapOptional((existingBinding) -> {
+        T implementation = existingBinding.getProvider().get();
+        return Nary.of(implementation);
+      })
+      .orElse(MissingBindingNary.create(expectedType));
   }
 
   @Override
