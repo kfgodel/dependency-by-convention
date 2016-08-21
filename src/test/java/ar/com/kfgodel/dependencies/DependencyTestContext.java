@@ -1,6 +1,6 @@
 package ar.com.kfgodel.dependencies;
 
-import ar.com.dgarcia.javaspec.api.TestContext;
+import ar.com.dgarcia.javaspec.api.contexts.TestContext;
 import ar.com.kfgodel.dependencies.api.DependencyInjector;
 
 import java.util.function.Supplier;
