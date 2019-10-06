@@ -26,7 +26,7 @@
 
   <properties>
     <!-- Sonar properties to prevent unintentional id changes (Reference: https://docs.sonarqube.org/latest/analysis/analysis-parameters/) -->
-    <sonar.projectKey>ar.com.kfgodel:dependency-by-convention:master</sonar.projectKey>
+    <sonar.projectKey>ar.com.kfgodel:dependency-by-convention</sonar.projectKey>
 
     <version.guice>4.0</version.guice>
     <version.diamond>1.0.4</version.diamond>
