@@ -16,14 +16,18 @@
 
   <name>Dependency-By-Convention</name>
   <description>Project to manage dependencies between objects using a DI framework by convention</description>
+  <url>https://github.com/kfgodel/dependency-by-convention</url>
 
   <scm>
-    <connection>scm:git:ssh://github.com/kfgodel/dependency-by-convention.git</connection>
     <developerConnection>scm:git:ssh://github.com/kfgodel/dependency-by-convention.git</developerConnection>
-    <url>https://github.com/kfgodel/dependency-by-convention</url>
+    <connection>${project.scm.developerConnection}</connection>
+    <url>${project.url}</url>
   </scm>
 
   <properties>
+    <!-- Sonar properties to prevent unintentional id changes (Reference: https://docs.sonarqube.org/latest/analysis/analysis-parameters/) -->
+    <sonar.projectKey>ar.com.kfgodel:dependency-by-convention:master</sonar.projectKey>
+
     <version.guice>4.0</version.guice>
     <version.diamond>1.0.4</version.diamond>
   </properties>
